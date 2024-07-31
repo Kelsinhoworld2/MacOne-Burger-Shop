@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | MacOne Burger Shop</title>
+
+    <link rel="stylesheet" href="../styles/admin.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="login" class="">
+        <h1>Painel de administrador</h1>
+        <form id="login-form">
+            <div class="input-wrapper">
+                <label for="email">E-mail</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="password">Senha</label>
+                <input type="password" id="password">
+            </div>
+
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+
+    <div id="page" class="active">
+        <h2>Novo produto</h2>
+        <hr>
+        <div class="post-wrapper">
+            <form id="post-product">
+                <div class="mb-3">
+                    <label for="produto" class="form-label">Nome do produto</label>
+                    <input type="text" class="form-control" name="produto" id="produto" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="preco" class="form-label">Preço</label>
+                    <input type="number" class="form-control" name="preco" id="preco"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Descrição do produto</label>
+                    <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imagem" class="form-label">Imagem do produto</label>
+                    <input class="form-control" type="file" id="imagem" name="imagem" accept="image/*" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+        </div>
+
+        <h2>Produtos cadastrados</h2>
+        <hr>
+        <div class="all-products">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Preço</th>
+                        <th scope="col">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="produtos">
+                </tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>Powered by <a href="https://www.github.com/imacod3r" target="_blank">Imacod3r</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+
+<!-- Importando o SDK principal do Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<!-- Importando o Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<!-- Importando o Firebase Storage -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDkm2zyEp7tZP3ddbJj-EQrk7cHpB-JcIk",
+        authDomain: "macone-burger-shop.firebaseapp.com",
+        projectId: "macone-burger-shop",
+        storageBucket: "macone-burger-shop.appspot.com",
+        messagingSenderId: "1033806358140",
+        appId: "1:1033806358140:web:1ecd20cefc0b317aa54bf9"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Instanciar as ferramentas
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // Adicionar produtos ao banco
+    function AdicionarProduto(produto) {
+        db.collection("produtos").add(produto).then((docRef) => {
+            console.log("Produto adicionado com sucesso!");
+        }).catch((error) => {
+            console.error("Erro ao adicionar produto: ", error);
+        })
+    }
+
+    const produtoForm = document.getElementById("post-product");
+    produtoForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Primeiro, faz o upload da imagem e obtém a URL
+        UploadImage().then((imagemProduto) => {
+            // Depois de obter a URL, cria o objeto de produto
+            let newProduct = {
+                nomeProduto: e.target.elements.produto.value,
+                precoProduto: e.target.elements.preco.value,
+                descricaoProduto: e.target.elements.desc.value,
+                imagemProduto: imagemProduto
+            };
+
+            // Chama a função para adicionar o produto ao Firestore
+            AdicionarProduto(newProduct);
+
+            // Limpar formulario
+            produtoForm.reset();
+
+        }).catch((error) => {
+            console.error("Erro ao carregar a imagem ou salvar o produto:", error);
+        });
+
+
+    });
+
+    // Upload de imagem
+    function UploadImage() {
+        return new Promise((resolve, reject) => {
+            var file = document.getElementById("imagem").files[0];
+
+            if (file) {
+                // Referência ao armazenamento
+                var storageRef = storage.ref('uploads/' + file.name);
+
+                // Fazendo o upload do arquivo
+                var uploadTask = storageRef.put(file);
+
+                uploadTask.on('state_changed',
+                    function (snapshot) {
+                        // Progresso do upload (em porcentagem)
+                        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Progresso do upload: ' + progress + '%');
+                    },
+                    function (error) {
+                        // Tratar erros de upload
+                        console.error('Erro no upload:', error);
+                        reject(error);
+                    },
+                    function () {
+                        // Upload completo, obtendo a URL de download
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            console.log('URL do arquivo:', downloadURL);
+                            resolve(downloadURL);
+                        }).catch((error) => {
+                            console.error('Erro ao obter URL de download:', error);
+                            reject(error);
+                        });
+                    }
+                );
+            } else {
+                reject(new Error("Nenhum arquivo foi selecionado"));
+            }
+        });
+    }
+
+    // Listar produtos
+    function mostrarProdutos() {
+        // Escuta em tempo real para a coleção "produtos"
+        db.collection("produtos").onSnapshot(function (querySnapshot) {
+            var produtos = []; // Array para armazenar os dados
+
+            querySnapshot.forEach(function (doc) {
+                // Adiciona cada documento ao array
+                produtos.push({ id: doc.id, ...doc.data() });
+            });
+
+            // Exibe os dados no elemento "tabela de produtos"
+            var tabelaProdutos = document.getElementById("produtos");
+            tabelaProdutos.innerHTML = ''; // Limpa o conteúdo atual
+
+            produtos.forEach((produto) => {
+                // Cria uma linha para cada produto
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${produto.nomeProduto}</td>
+                <td>${produto.precoProduto}</td>
+                <td>
+                    <button class="btn btn-secondary" id="edit-button-${produto.id}">Editar</button>
+                    <button class="btn btn-danger" id="delete-button-${produto.id}">Deletar</button>
+                </td>
+            `;
+                tabelaProdutos.appendChild(row);
+
+                // Associar o evento de clique ao botão de deletar
+                document.getElementById(`delete-button-${produto.id}`).addEventListener("click", () => {
+                    DeletarProduto(produto.id);
+                });
+            });
+        }, function (error) {
+            console.log("Erro ao obter documentos: ", error);
+        });
+    }
+
+    // Função para deletar um produto
+    function DeletarProduto(produtoId) {
+        db.collection("produtos").doc(produtoId).delete().then(() => {
+            console.log("Produto deletado com sucesso!");
+        }).catch((error) => {
+            console.error("Erro ao deletar produto: ", error);
+        });
+    }
+
+    // Chama a função para mostrar os produtos ao carregar a página
+    mostrarProdutos();
+
+</script>

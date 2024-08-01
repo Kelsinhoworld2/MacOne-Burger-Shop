@@ -35,42 +35,6 @@ div#login{
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#login-form{
-    width: 100%;
-    font-family: sans-serif;
-}
-
-#login-form .input-wrapper{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;   
-    margin: 0 0 10px;
-}
-
-.input-wrapper label{
-    font-weight: 600;
-}
-
-.input-wrapper input{
-    height: 40px;
-    padding: 0 10px;
-    border-radius: 5px;
-    border: 1px solid #000;
-    
-    outline: none;
-    font-size: 16px;
-}
-
-#login-form button{
-    height: 30px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-
-    background-color: #1A75E9;
-    color: #fff;
-}
-
 /* Page */
 #page{
     display: none;
@@ -79,6 +43,11 @@ div#login{
 #page.active{
     display: block;
     margin: 30px;
+}
+
+#page .page-actions{
+    display: flex;
+    justify-content: flex-end;
 }
 
 #page div{

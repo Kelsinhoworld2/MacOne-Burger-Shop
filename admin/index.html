@@ -12,24 +12,29 @@
 </head>
 
 <body>
-    <div id="login" class="">
+    <div id="login" class="active">
         <h1>Painel de administrador</h1>
         <form id="login-form">
-            <div class="input-wrapper">
-                <label for="email">E-mail</label>
-                <input type="email" name="email" id="email" required>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" name="email" id="email" class="form-control" required>
             </div>
 
             <div class="input-wrapper">
-                <label for="password">Senha</label>
-                <input type="password" id="password">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" id="password" class="form-control" required>
             </div>
 
-            <button type="submit">Entrar</button>
+            <div class="mb-3" style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </div>
         </form>
     </div>
 
-    <div id="page" class="active">
+    <div id="page">
+        <div class="page-actions">
+            <button class="btn btn-danger" id="logout-button">Sair</button>
+        </div>
         <h2>Novo produto</h2>
         <hr>
         <div class="post-wrapper">
@@ -41,7 +46,17 @@
 
                 <div class="mb-3">
                     <label for="preco" class="form-label">Preço</label>
-                    <input type="number" class="form-control" name="preco" id="preco"  required>
+                    <input type="number" class="form-control" name="preco" id="preco" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoria</label>
+                    <select class="form-select" id="categoria" name="categoria" aria-label="Escolher uma categoria">
+                        <option disabled selected>Escolha uma categoria</option>
+                        <option value="default">Padrão</option>
+                        <option value="sobremesa">Sobremesas</option>
+                        <option value="bebidas">Bebidas</option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
@@ -66,6 +81,7 @@
                     <tr>
                         <th scope="col">Nome</th>
                         <th scope="col">Preço</th>
+                        <th scope="col">Categoria</th>
                         <th scope="col">Ação</th>
                     </tr>
                 </thead>
@@ -77,6 +93,55 @@
         <footer>
             <p>Powered by <a href="https://www.github.com/imacod3r" target="_blank">Imacod3r</a></p>
         </footer>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-product">
+                        <div class="mb-3">
+                            <label for="produto" class="form-label">Nome do produto</label>
+                            <input type="text" class="form-control" name="produto" id="produto" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="preco" class="form-label">Preço</label>
+                            <input type="number" class="form-control" name="preco" id="preco" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoria</label>
+                            <select class="form-select" id="categoria" name="categoria"
+                                aria-label="Escolher uma categoria">
+                                <option disabled selected>Escolha uma categoria</option>
+                                <option value="default">Padrão</option>
+                                <option value="sobremesa">Sobremesas</option>
+                                <option value="bebidas">Bebidas</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="desc" class="form-label">Descrição do produto</label>
+                            <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="display" class="form-label">Imagem</label>
+                            <img id="display" width="128px" height="128px" style="display: block; object-fit: fill;">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="save-button">Salvar alterações</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
@@ -91,6 +156,9 @@
 
 <!-- Importando o SDK principal do Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<!-- Importando o Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <!-- Importando o Firebase Firestore -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -112,8 +180,58 @@
     firebase.initializeApp(firebaseConfig);
 
     // Instanciar as ferramentas
+    const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
+
+    // Autenticar admin
+    const loginForm = document.getElementById("login-form");
+    loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let email = e.target.elements.email.value;
+        let password = e.target.elements.password.value;
+
+        auth.signInWithEmailAndPassword(email, password)
+            .then(() => {
+                // Login bem-sucedido
+                document.getElementById("login").classList.remove('active');
+                document.getElementById("page").classList.add("active");
+
+                loginForm.reset()
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.error("Erro ao fazer login:", errorCode, errorMessage);
+            });
+    })
+
+    // Verificar admin autenticado
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // Usuário está logado
+            document.getElementById("login").classList.remove('active');
+            document.getElementById("page").classList.add("active");
+        } else {
+            // Usuário não está logado
+            document.getElementById("login").classList.add('active');
+            document.getElementById("page").classList.remove("active");
+        }
+    });
+
+    // Logout
+    function logout() {
+        auth.signOut().then(() => {
+            document.getElementById("login").classList.remove('active');
+            document.getElementById("page").classList.add("active");
+        }).catch((error) => {
+            console.error("Erro ao deslogar:", error);
+        });
+    }
+
+    const logoutBtn = document.getElementById("logout-button");
+    logoutBtn.addEventListener("click", logout);
 
     // Adicionar produtos ao banco
     function AdicionarProduto(produto) {
@@ -134,6 +252,7 @@
             let newProduct = {
                 nomeProduto: e.target.elements.produto.value,
                 precoProduto: e.target.elements.preco.value,
+                categoriaProduto: e.target.elements.categoria.value,
                 descricaoProduto: e.target.elements.desc.value,
                 imagemProduto: imagemProduto
             };
@@ -212,22 +331,73 @@
                 row.innerHTML = `
                 <td>${produto.nomeProduto}</td>
                 <td>${produto.precoProduto}</td>
+                <td>${produto.categoriaProduto}</td>
                 <td>
-                    <button class="btn btn-secondary" id="edit-button-${produto.id}">Editar</button>
+                    <button class="btn btn-secondary" id="edit-button-${produto.id}" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
                     <button class="btn btn-danger" id="delete-button-${produto.id}">Deletar</button>
                 </td>
             `;
                 tabelaProdutos.appendChild(row);
 
+                // Associar o evento de clique ao botão de editar
+                document.getElementById(`edit-button-${produto.id}`).addEventListener("click", () => {
+                    EditarProduto(produto.id);
+                });
+
                 // Associar o evento de clique ao botão de deletar
                 document.getElementById(`delete-button-${produto.id}`).addEventListener("click", () => {
                     DeletarProduto(produto.id);
                 });
+
             });
         }, function (error) {
             console.log("Erro ao obter documentos: ", error);
         });
     }
+
+    // Função para editar um produto
+    function EditarProduto(produtoId) {
+        var editForm = document.getElementById("edit-product");
+
+        // Referência ao documento
+        var docRef = db.collection("produtos").doc(produtoId);
+
+        // Recupera o documento
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                let produto = doc.data();
+                console.log("Produto:", produto);
+
+                // Carregar dados nos campos de input
+                editForm.elements.produto.value = produto.nomeProduto;
+                editForm.elements.preco.value = produto.precoProduto;
+                editForm.elements.categoria.value = produto.categoriaProduto;
+                editForm.elements.desc.value = produto.descricaoProduto;
+
+                // Carregar imagem
+                var imagem = document.getElementById("display");
+                imagem.src = produto.imagemProduto;
+
+                // Salvar alterações no banco
+                let saveBtn = document.getElementById("save-button");
+                saveBtn.addEventListener("click", () => {
+                    db.collection("produtos").doc(produtoId).update({
+                        nomeProduto: editForm.elements.produto.value,
+                        precoProduto: editForm.elements.preco.value,
+                        categoriaProduto: editForm.elements.categoria.value,
+                        descricaoProduto: editForm.elements.desc.value
+                    }).then(() => editForm.reset())
+                });
+
+            }
+            else {
+                console.log("Nenhum documento encontrado com o ID fornecido.");
+            }
+        }).catch(function (error) {
+            console.log("Erro ao obter documento:", error);
+        });
+    }
+
 
     // Função para deletar um produto
     function DeletarProduto(produtoId) {

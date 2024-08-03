@@ -180,7 +180,10 @@ checkoutBtn.addEventListener("click", function(){
   //Enviar o pedido para api whats
   const cartItems = cart.map((item) => {
     return (
-      ` ${item.name} Quantidade: (${item.quantity}) Preço: R$${item.price} |`
+      `Escolha: ${item.name} 
+      Quantidade: (${item.quantity}) 
+      Preço: R$${item.price}
+      `
     )
   }).join("")
 
@@ -199,7 +202,7 @@ checkoutBtn.addEventListener("click", function(){
 function checkRestaurantOpen(){
   const data = new Date();
   const hora = data.getHours();
-  return hora >= 18 && hora < 22; 
+  return hora >= 8 && hora < 20; 
   //true = restaurante está aberto 
 }
 

@@ -18,10 +18,10 @@
 
   <!-- META TAG OG -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Dev Burguer - O melhor hamburuger dev!" />
+  <meta property="og:title" content="MacOne Burger Shop!" />
   <meta property="og:image" content="https://projeto-cardapio-wine.vercel.app/assets/hamb-1.png" />
   <meta property="og:description" content="O melhor hamburuger caseiro de verdade!" />
-  <meta property="og:site_name" content="DevBuruger" />
+  <meta property="og:site_name" content="MacOne" />
 
   <link rel="stylesheet" href="./styles/output.css" />
 
@@ -39,7 +39,7 @@
         MacOne Burger Shop
       </h1>
 
-      <span class="text-white font-medium">Cabassango - Cabinda Cabinda, Angola</span>
+      <span class="text-white font-medium">Cabassango - Cabinda, Cabinda, Angola</span>
 
       <div class="bg-green-600 px-4 py-1 rounded-lg mt-5" id="date-span">
         <span class="text-white font-medium">Seg á Dom - 8:00 as 22:00</span>
@@ -56,7 +56,7 @@
   <!-- INICIO MENU -->
   <div id="menu">
 
-    <main class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-16">
+    <main class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-16 main-menu">
 
       <!-- PRODUTO ITEM -->
       <div class="flex gap-2">
@@ -70,11 +70,7 @@
 
           <div class="flex items-center gap-2 justify-between mt-3">
             <p class="font-bold text-lg">R$ 18.90</p>
-            <button 
-              class="bg-gray-900 px-5 rounded add-to-cart-btn"
-              data-name="Hamburguer Smash"
-              data-price="18.90"
-            >
+            <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburguer Smash" data-price="18.90">
               <i class="fa fa-cart-plus text-lg text-white"></i>
             </button>
           </div>
@@ -96,11 +92,7 @@
 
           <div class="flex items-center gap-2 justify-between mt-3">
             <p class="font-bold text-lg">R$ 32.90</p>
-            <button 
-              class="bg-gray-900 px-5 rounded add-to-cart-btn"
-              data-name="Hamburuger Duplo"
-              data-price="32.90"
-            >
+            <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburuger Duplo" data-price="32.90">
               <i class="fa fa-cart-plus text-lg text-white"></i>
             </button>
           </div>
@@ -123,11 +115,7 @@
 
           <div class="flex items-center gap-2 justify-between mt-3">
             <p class="font-bold text-lg">R$ 35.90</p>
-            <button 
-              class="bg-gray-900 px-5 rounded add-to-cart-btn"
-              data-name="Hamburuger Salad"
-              data-price="35.90"
-            >
+            <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburuger Salad" data-price="35.90">
               <i class="fa fa-cart-plus text-lg text-white"></i>
             </button>
           </div>
@@ -149,11 +137,7 @@
 
           <div class="flex items-center gap-2 justify-between mt-3">
             <p class="font-bold text-lg">R$ 30</p>
-            <button 
-              class="bg-gray-900 px-5 rounded add-to-cart-btn"
-              data-name="Hamburuger da casa"
-              data-price="30"
-            >
+            <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="Hamburuger da casa" data-price="30">
               <i class="fa fa-cart-plus text-lg text-white"></i>
             </button>
           </div>
@@ -172,61 +156,26 @@
     </div>
 
     <!-- GRID BEBIDAS -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-16" id="menu">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-16 bebidas-menu" id="menu">
 
-      <!-- BEBIDA ITEM -->
-        <div class="flex gap-2 w-full">
-          <img 
-            src="./assets/refri-1.png"
-            alt="Coca lata"
-            class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300"
-          />
-  
-          <div class="w-full">
-            <p class="font-bold">Coca lata</p>
-  
-            <div class="flex items-center gap-2 justify-between mt-3">
-              <p class="font-bold text-lg">R$ 6</p>
-              <button 
-                class="bg-gray-900 px-5 rounded add-to-cart-btn"
-                data-name="Coca lata"
-                data-price="6"
-              >
-                <i class="fa fa-cart-plus text-lg text-white"></i>
-              </button>
-            </div>
-  
-          </div>
-  
-        </div>
-        <!-- FIM BEBIDA ITEM --> 
-
-      <!-- BEBIDA ITEM -->
-      <div class="flex gap-2 w-full">
-        <img src="./assets/refri-2.png" alt="Guaraná lata"
-          class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" />
-
-        <div class="w-full">
-          <p class="font-bold">Guaraná lata</p>
-
-          <div class="flex items-center gap-2 justify-between mt-3">
-            <p class="font-bold text-lg">R$ 6</p>
-            <button 
-              class="bg-gray-900 px-5 rounded add-to-cart-btn"
-              data-name="Guarana lata"
-              data-price="6"
-            >
-              <i class="fa fa-cart-plus text-lg text-white"></i>
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-      <!-- FIM BEBIDA ITEM -->
+      <!-- Renderizar bebidas -->
 
     </div>
     <!-- FIM GRID BEBIDAS -->
+
+    <div class="mx-auto max-w-7xl px-2 my-2">
+      <h2 class="font-bold text-3xl">
+        Sobremesas
+      </h2>
+    </div>
+
+    <!-- GRID SOBREMESAS -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-7 md:gap-10 mx-auto max-w-7xl px-2 mb-16 sobremesas-menu" id="menu">
+
+      <!-- Renderizar sobremesas -->
+
+    </div>
+    <!-- FIM GRID SOBREMESAS -->
 
   </div>
   <!-- FIM MENU -->
@@ -290,4 +239,93 @@
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const mainMenu = document.querySelector(".main-menu");
+  const bebidasMenu = document.querySelector(".bebidas-menu");
+  const sobremesasMenu = document.querySelector(".sobremesas-menu");
+
+  function renderizarProdutos(produto) {
+    if (produto.categoriaProduto == "default") {
+      mainMenu.innerHTML += `
+      <div class="flex gap-2">
+        <img src="${produto.imagemProduto}" alt="foto do produto"
+          class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" />
+
+        <div>
+          <p class="font-bold">${produto.nomeProduto}</p>
+          <p class="text-sm">${produto.descricaoProduto}
+          </p>
+
+          <div class="flex items-center gap-2 justify-between mt-3">
+            <p class="font-bold text-lg">${produto.precoProduto} Kz</p>
+            <button 
+              class="bg-gray-900 px-5 rounded add-to-cart-btn"
+              data-name="${produto.nomeProduto}"
+              data-price="${produto.precoProduto}"
+            >
+              <i class="fa fa-cart-plus text-lg text-white"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    `;
+    }
+    else {
+      if (produto.categoriaProduto == "bebidas") {
+        bebidasMenu.innerHTML += `
+        <div class="flex gap-2 w-full">
+        <img src="${produto.imagemProduto}" alt="foto do produto"
+          class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" />
+
+        <div class="w-full">
+          <p class="font-bold">${produto.nomeProduto}</p>
+
+          <div class="flex items-center gap-2 justify-between mt-3">
+            <p class="font-bold text-lg">${produto.precoProduto} Kz</p>
+            <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="${produto.nomeProduto}" data-price="${produto.precoProduto}">
+              <i class="fa fa-cart-plus text-lg text-white"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+      `;
+      }
+      else {
+        if (produto.categoriaProduto == "sobremesa") {
+          sobremesasMenu.innerHTML += `
+          <div class="flex gap-2 w-full">
+        <img src="${produto.imagemProduto}" alt="foto do produto"
+          class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300" />
+
+        <div class="w-full">
+          <p class="font-bold">${produto.nomeProduto}</p>
+
+          <div class="flex items-center gap-2 justify-between mt-3">
+            <p class="font-bold text-lg">${produto.precoProduto} Kz</p>
+            <button class="bg-gray-900 px-5 rounded add-to-cart-btn" data-name="${produto.nomeProduto}" data-price="${produto.precoProduto}">
+              <i class="fa fa-cart-plus text-lg text-white"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+        `
+        }
+      }
+    }
+  }
+
+  db.collection("produtos").get().
+    then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        let produto = doc.data();
+        renderizarProdutos(produto);
+      })
+    })
 </script>

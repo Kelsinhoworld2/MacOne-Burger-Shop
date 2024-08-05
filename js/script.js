@@ -80,7 +80,7 @@ function updateCartModal(){
         <div>
           <p class="font-medium">${item.name}</p>
           <p>Qtd: ${item.quantity}</p>
-          <p class="font-medium mt-2">R$ ${item.price.toFixed(2)}</p>
+          <p class="font-medium mt-2">${item.price.toFixed(2)} Kz</p>
         </div>
 
 
@@ -99,13 +99,12 @@ function updateCartModal(){
 
   cartTotal.textContent = total.toLocaleString("pt-BR", {
     style: "currency",
-    currency: "BRL"
+    currency: "AOA"
   });
 
   cartCounter.innerHTML = cart.length;
 
 }
-
 
 // Função para remover o item do carrinho
 cartItemsContainer.addEventListener("click", function (event){
@@ -144,8 +143,6 @@ addressInput.addEventListener("input", function(event){
     addressInput.classList.remove("border-red-500")
     addressWarn.classList.add("hidden")
   }
-
-
 })
 
 
